@@ -15,4 +15,6 @@
     - `git clone --recurse-submodules git@github.com:Pithone/tapioca.git`
 7. Compile demo software
     - `cd tapioca/rpi-rgb-led-matrix/examples-api-use`
-    - make
+    - `make`
+8. Run demo
+    - `./demo.sh`
