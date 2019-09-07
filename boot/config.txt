@@ -54,3 +54,6 @@
 
 # Enable audio (loads snd_bcm2835)
 dtparam=audio=off
+
+# Enable UART for debugging
+enable_uart=on
