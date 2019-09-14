@@ -1,8 +1,0 @@
-
-cd /home/pi/rpi-rgb-led-matrix/examples-api-use
-
-make
-
-sudo ./demo
-
-sudo ./demo --led-rows=32 --led-cols=64 --led-chain=2 --led-pixel-mapper=U-mapper --led-pwm-bits=11 --led-show-refresh --led-slowdown-gpio=0 --led-no-drop-privs --led-pwm-lsb-nanoseconds=180 --led-brightness=100 -D
