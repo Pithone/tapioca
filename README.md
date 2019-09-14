@@ -15,10 +15,11 @@
 5. Clone this repo into the raspberry
     - `git clone --recurse-submodules git@github.com:Pithone/tapioca.git`
 7. Compile demo software
-    - `cd tapioca/rpi-rgb-led-matrix/examples-api-use`
+    - `cd tapioca/submodules/rpi-rgb-led-matrix/examples-api-use`
     - `make`
+    - `cd ../../..`
 8. Run demo
-    - `./demo.sh`
+    - `./scripts/demo.sh`
 
 ## Credits
 

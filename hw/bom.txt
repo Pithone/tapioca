@@ -14,5 +14,3 @@ A.N.:Received but still to be tested, as of today it’s the cheapest option for
 https://s.click.aliexpress.com/e/Kq6ltygC
 
 A.N.:Tested, works out of the box with the repo
-
-

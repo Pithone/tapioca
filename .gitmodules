@@ -1,3 +1,9 @@
-[submodule "rpi-rgb-led-matrix"]
-	path = rpi-rgb-led-matrix
+[submodule "submodules/rpi-rgb-led-matrix"]
+	path = submodules/rpi-rgb-led-matrix
 	url = https://github.com/hzeller/rpi-rgb-led-matrix
+[submodule "submodules/json"]
+	path = submodules/json
+	url = https://github.com/nlohmann/json
+[submodule "submodules/cpr"]
+	path = submodules/cpr
+	url = https://github.com/whoshuu/cpr
