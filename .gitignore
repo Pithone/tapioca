@@ -1,2 +1,4 @@
 # Out-of-tree build dir
 build/
+# External modules binary path
+bin/

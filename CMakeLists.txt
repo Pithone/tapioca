@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.13.4)
-project(tapioca)
+project(tapioca VERSION 0.1 LANGUAGES CXX)
 
 if(NOT ${CMAKE_VERSION} LESS 3.2)
     set(CMAKE_CXX_STANDARD 11)
@@ -29,13 +29,20 @@ else()
     endif()
 endif()
 
+include(${CMAKE_ROOT}/Modules/ExternalProject.cmake)
+include(${CMAKE_ROOT}/Modules/ProcessorCount.cmake)
+
 set (PROJECT_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 set (TAPIOCA_SOURCES ${PROJECT_SOURCE_DIR}/tapioca.cc)
+set (GLOBAL_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
 add_executable (tapioca ${TAPIOCA_SOURCES})
 
 add_subdirectory(submodules)
 include_directories(${CPR_INCLUDE_DIRS})
+include_directories(${RGB_INCLUDE_DIRS})
 
 target_link_libraries(tapioca PRIVATE ${CPR_LIBRARIES})
 target_link_libraries(tapioca PRIVATE nlohmann_json::nlohmann_json)
+
+link_directories(${GLOBAL_OUTPUT_PATH})
