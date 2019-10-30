@@ -18,8 +18,8 @@
     - `cd tapioca/submodules/rpi-rgb-led-matrix/examples-api-use`
     - `make`
     - `cd ../../..`
-8. Run demo
-    - `./scripts/demo.sh`
+8. Run clock
+    - `./scripts/clock.sh`
 
 ## Credits
 
