@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.13.4)
 project(tapioca VERSION 0.1 LANGUAGES CXX)
 
+find_package (Threads)
+
 if(NOT ${CMAKE_VERSION} LESS 3.2)
     set(CMAKE_CXX_STANDARD 11)
     set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -36,13 +38,16 @@ set (PROJECT_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src)
 set (TAPIOCA_SOURCES ${PROJECT_SOURCE_DIR}/tapioca.cc)
 set (GLOBAL_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
-add_executable (tapioca ${TAPIOCA_SOURCES})
-
 add_subdirectory(submodules)
 include_directories(${CPR_INCLUDE_DIRS})
 include_directories(${RGB_INCLUDE_DIRS})
+include_directories(${TOML_INCLUDE_DIRS})
+
+add_executable (tapioca ${TAPIOCA_SOURCES})
 
 target_link_libraries(tapioca PRIVATE ${CPR_LIBRARIES})
 target_link_libraries(tapioca PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(tapioca PRIVATE ${GLOBAL_OUTPUT_PATH}/librgbmatrix.a)
+target_link_libraries(tapioca PRIVATE ${CMAKE_THREAD_LIBS_INIT})
 
-link_directories(${GLOBAL_OUTPUT_PATH})
+add_dependencies(tapioca rgbmatrix_build)

@@ -7,3 +7,6 @@
 [submodule "submodules/cpr"]
 	path = submodules/cpr
 	url = https://github.com/whoshuu/cpr
+[submodule "submodules/toml11"]
+	path = submodules/toml11
+	url = https://github.com/ToruNiina/toml11

@@ -2,3 +2,4 @@
 build/
 # External modules binary path
 bin/
+config.toml

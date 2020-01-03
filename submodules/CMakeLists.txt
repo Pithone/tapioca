@@ -1,5 +1,7 @@
 set(JSON_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/json/src PARENT_SCOPE)
+set(TOML_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/toml11 PARENT_SCOPE)
 set(RGB_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/rpi-rgb-led-matrix/include PARENT_SCOPE)
+set(RGB_LIB_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/rpi-rgb-led-matrix/lib PARENT_SCOPE)
 
 # Don't build external libraries tests
 set(JSON_BuildTests OFF CACHE INTERNAL "")
@@ -17,17 +19,15 @@ add_subdirectory(json)
 
 ProcessorCount(NCPU)
 
-ExternalProject_Add(rpi-rgb-led-matrix
+ExternalProject_Add(rgbmatrix_build
     SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/rpi-rgb-led-matrix
     BUILD_COMMAND make
     PREFIX rpi-rgb-led-matrix
     CONFIGURE_COMMAND ""
     BUILD_COMMAND -j${NCPU}
     BUILD_IN_SOURCE 1
-    INSTALL_COMMAND ""
-   )
+    INSTALL_COMMAND "" # The library does not provide any install facility
+)
 
-ExternalProject_Add_Step(rpi-rgb-led-matrix copytobin
-    COMMAND $(CMAKE_COMMAND) -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/rpi-rgb-led-matrix/lib ${GLOBAL_OUTPUT_PATH}
-    DEPENDEES install
-   )
+add_library(rgbmatrix STATIC IMPORTED)
+set_target_properties(rgbmatrix PROPERTIES IMPORTED_LOCATION ${RGB_LIB_DIRS}/librgbmatrix.a)
