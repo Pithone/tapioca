@@ -11,7 +11,11 @@
 #include "rgbdisplay.h"
 #include "termdisplay.h"
 
-std::vector<Journey> get_journeys(Config config) {
+using namespace std;
+
+vector<Journey> get_journeys(Config config) {
+    vector<Journey> journeys;
+
     /* TODO: Use only SUGGESTED journeys, that can be found at
      * json["sections"][0]["journeys"] */
     auto response = cpr::Get(cpr::Url{"https://it-milan-api.citymapper.com/7/journeys"},
@@ -19,36 +23,54 @@ std::vector<Journey> get_journeys(Config config) {
                                              {"end", config.end_point}});
 
     auto json = nlohmann::json::parse(response.text);
-    int j_idx = 0;
     for(auto journey : json["journeys"]) {
-        j_idx++;
-        std::cout << "Journey number " << j_idx << ": ";
+        Journey j;
         for(auto leg : journey["legs"]) {
-            if (leg["mode"] == "transit") {
-                std::cout << leg["routes"][0]["affinities"][0].get<std::string>();
-                std::cout << " |" << leg["routes"][0]["display_name"].get<std::string>() << " ";
-            } else
-                std::cout << leg["mode"].get<std::string>() << " ";
+            /* Match route type */
+            leg_mode mode;
+            string name, colorstr;
+            if (leg["mode"].get<string>().compare("transit") == 0) {
+                name = leg["routes"][0]["display_name"].get<string>();
+                string modestr = leg["routes"][0]["affinities"][0].get<string>();
+                if (modestr.compare("rail") == 0)
+                    mode = TRAIN;
+                // TODO: Add other matches for TRAM, CAR, BUS, BIKE
+                /* Extract color */
+                colorstr = leg["routes"][0]["color"].get<string>();
+            } else if (leg["mode"].get<string>().compare("walk") == 0) {
+                mode = WALK;
+                name = "Walk";
+                colorstr = "#000000";
+            }
+            if (colorstr.compare("") == 0)
+                colorstr = "#000000";
+            colorstr.erase(0, 1);
+            int colornum = stoi(colorstr, 0, 16);
+            int r = colornum / 0x10000;
+            int g = (colornum / 0x100) % 0x100;
+            int b = colornum % 0x100;
+            j.legs.push_back(Leg(mode, name, Color(r,g,b)));
         }
-        std::cout << std::endl;
+        journeys.push_back(j);
     }
+    return journeys;
 }
 
 int main(int argc, char** argv) {
-    std::unique_ptr<Display> display;
+    unique_ptr<Display> display;
 
     /* Load configuration file */
     Config config = Config();
 
     if (config.terminal) {
-        display = std::make_unique<TermDisplay>();
+        display = make_unique<TermDisplay>();
     } else {
-        display = std::make_unique<RgbDisplay>();
+        display = make_unique<RgbDisplay>();
     }
 
     /* Continue until SIGSTOP is received */
     for(;;) {
-        std::vector<Journey> journeys = get_journeys(config);
+        vector<Journey> journeys = get_journeys(config);
 
         /* Print data to matrix */
         display.get()->print_header(config);
@@ -58,7 +80,7 @@ int main(int argc, char** argv) {
         display.get()->print_footer(config);
 
         /* Wait for one minute before refreshing */
-        std::this_thread::sleep_for(std::chrono::minutes(1));
+        this_thread::sleep_for(chrono::minutes(1));
     }
 
     return 0;

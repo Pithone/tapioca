@@ -26,19 +26,24 @@ class Config {
 
 class Color {
     public:
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-
         Color(int r, int g, int b) {
             this->r = r;
             this->g = g;
             this->b = b;
         }
+
+        unsigned char r;
+        unsigned char g;
+        unsigned char b;
 };
 
 class Leg {
     public:
+        Leg(enum leg_mode mode,
+            std::string name,
+            Color color) : mode(mode),
+                           name(name),
+                           color(color) {}
         enum leg_mode mode;
         std::string name;
         Color color;

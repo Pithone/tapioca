@@ -2,6 +2,8 @@
 
 #include "termdisplay.h"
 
+using namespace std;
+
 TermDisplay::TermDisplay() {
 
 }
@@ -13,13 +15,16 @@ TermDisplay::~TermDisplay() {
 void TermDisplay::init(Config config) { }
 
 void TermDisplay::print_header(Config config) {
-    std::cout << "HEADER" << std::endl;
+    cout << "  tapioca" << endl;
 }
 
 void TermDisplay::print_journey(Config config, Journey journey) {
-    std::cout << "CONTENT" << std::endl;
+    for (auto leg : journey.legs) {
+        cout << leg.mode << " " << leg.name << " - ";
+    }
+    cout << endl;
 }
 
 void TermDisplay::print_footer(Config config) {
-    std::cout << "FOOTER" << std::endl;
+    cout << "--------" << endl;
 }
