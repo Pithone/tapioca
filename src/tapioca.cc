@@ -14,6 +14,12 @@
 using namespace std;
 using namespace std::chrono;
 
+template<typename T, typename... Args>
+std::unique_ptr<T> make_unique(Args&&... args)
+{
+    return std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+}
+
 vector<Journey> get_journeys(Config config) {
     vector<Journey> journeys;
 
@@ -89,14 +95,15 @@ int main(int argc, char** argv) {
         display = make_unique<RgbDisplay>();
     }
 
+    display.get()->init(config);
     /* Continue until SIGSTOP is received */
     for(;;) {
         vector<Journey> journeys = get_journeys(config);
 
         /* Fetch new data every minute */
         for (int i = 0; i < 60; i++) {
+            display.get()->clear(config);
             /* Print data to matrix */
-            display.get()->init(config);
             display.get()->print_header(config);
             for(auto journey : journeys) {
                 display.get()->print_journey(config, journey);

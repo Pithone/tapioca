@@ -10,6 +10,7 @@ class TermDisplay : public Display
     ~TermDisplay();
 
     virtual void init(Config config);
+    virtual void clear(Config config);
     virtual void print_header(Config config);
     virtual void print_journey(Config config, Journey journey);
     virtual void print_footer(Config config);

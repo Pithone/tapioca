@@ -11,15 +11,17 @@
 3. Copy all the `boot` directory into the raspberry pi boot partition
 4. Power it up and connect to it via ssh
 5. Update it and install git
-    - `sudo touch /var/lib/dpkg/status && sudo apt update && sudo apt upgrade -y && sudo apt install git`
-5. Clone this repo into the raspberry
+    - `sudo touch /var/lib/dpkg/status && sudo apt update && sudo apt upgrade -y && sudo apt install -y git`
+6. Clone this repo into the raspberry
     - `git clone --recurse-submodules git@github.com:Pithone/tapioca.git`
-7. Compile demo software
-    - `cd tapioca/submodules/rpi-rgb-led-matrix/examples-api-use`
+7. Compile tapioca software
+    - `cd tapioca`
+    - `mkdir build`
+    - `cd build`
+    - `cmake ..`
     - `make`
-    - `cd ../../..`
-8. Run demo
-    - `./scripts/demo.sh`
+8. Run tapioca software
+    - `./tapioca`
 
 ## Credits
 

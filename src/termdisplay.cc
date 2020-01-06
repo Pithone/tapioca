@@ -28,6 +28,10 @@ TermDisplay::~TermDisplay() {
 }
 
 void TermDisplay::init(Config config) {
+    ;
+}
+
+void TermDisplay::clear(Config config) {
     clear_screen();
 }
 
@@ -37,6 +41,7 @@ void TermDisplay::print_header(Config config) {
 
 void TermDisplay::print_journey(Config config, Journey journey) {
     // Print remaining time in minutes and seconds
+    // FIXME: when the deadline is passed the time counter breaks
     auto remaining_time = journey.departure_limit - system_clock::now();
     auto m = duration_cast<minutes>(remaining_time);
     remaining_time -= m;
