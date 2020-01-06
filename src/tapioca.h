@@ -51,8 +51,8 @@ class Leg {
 
 class Journey {
     public:
-        std::chrono::steady_clock::time_point departure_limit;
         std::vector<Leg> legs;
+        std::chrono::system_clock::time_point departure_limit;
 };
 
 #endif // TAPIOCA_H_

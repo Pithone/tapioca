@@ -12,6 +12,7 @@
 #include "termdisplay.h"
 
 using namespace std;
+using namespace std::chrono;
 
 vector<Journey> get_journeys(Config config) {
     vector<Journey> journeys;
@@ -24,11 +25,13 @@ vector<Journey> get_journeys(Config config) {
 
     auto json = nlohmann::json::parse(response.text);
     for(auto journey : json["journeys"]) {
+        bool is_time_init = false;
         Journey j;
         for(auto leg : journey["legs"]) {
             /* Match route type */
             leg_mode mode;
             string name, colorstr;
+            int walk_secs;
             if (leg["mode"].get<string>().compare("transit") == 0) {
                 name = leg["routes"][0]["display_name"].get<string>();
                 string modestr = leg["routes"][0]["affinities"][0].get<string>();
@@ -37,7 +40,25 @@ vector<Journey> get_journeys(Config config) {
                 // TODO: Add other matches for TRAM, CAR, BUS, BIKE
                 /* Extract color */
                 colorstr = leg["routes"][0]["color"].get<string>();
+                /* The first transport which is not walk defines the
+                 * departure deadline */
+                if (!is_time_init) {
+                    string departure =
+                        leg["departures"][0]["departure_time"].get<string>();
+                    tm parsed_time = {};
+                    istringstream ss(departure);
+                    ss >> get_time(&parsed_time, "%Y-%m-%dT%H:%M:%S%z");
+                    auto dep_time = system_clock::from_time_t(mktime(&parsed_time));
+                    auto now = chrono::system_clock::now();
+                    auto walk_time = std::chrono::seconds(walk_secs);
+                    j.departure_limit = dep_time - walk_time;
+                    is_time_init = true;
+                }
             } else if (leg["mode"].get<string>().compare("walk") == 0) {
+                /* Use walk time till the first station to compute deadline */
+                if (!is_time_init) {
+                    walk_secs = leg["duration_seconds"].get<int>();
+                }
                 mode = WALK;
                 name = "Walk";
                 colorstr = "#000000";
@@ -72,15 +93,18 @@ int main(int argc, char** argv) {
     for(;;) {
         vector<Journey> journeys = get_journeys(config);
 
-        /* Print data to matrix */
-        display.get()->print_header(config);
-        for(auto journey : journeys) {
-            display.get()->print_journey(config, journey);
+        /* Fetch new data every minute */
+        for (int i = 0; i < 60; i++) {
+            /* Print data to matrix */
+            display.get()->init(config);
+            display.get()->print_header(config);
+            for(auto journey : journeys) {
+                display.get()->print_journey(config, journey);
+            }
+            display.get()->print_footer(config);
+            /* Wait for one second before refreshing */
+            this_thread::sleep_for(chrono::seconds(1));
         }
-        display.get()->print_footer(config);
-
-        /* Wait for one minute before refreshing */
-        this_thread::sleep_for(chrono::minutes(1));
     }
 
     return 0;

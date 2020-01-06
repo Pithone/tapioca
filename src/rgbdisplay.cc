@@ -26,9 +26,19 @@ void RgbDisplay::init(Config config) {
 }
 
 void RgbDisplay::print_header(Config config) {
+    // TODO: Print clock here MM:SS, white centered
 }
 
 void RgbDisplay::print_journey(Config config, Journey journey) {
+    // TODO: For each journey print in the following format
+    // MM:SS W |S6 |R
+    // ^     ^ legs logos, colored pipe, name of the line
+    // | minutes and seconds till the deadline
+    
+    //rgb_matrix::DrawText(offscreen, *outline_font,
+    //                     x - 1, y + font.baseline(),
+    //                     outline_color, NULL, text_buffer,
+    //                     letter_spacing - 2);
 }
 
 void RgbDisplay::print_footer(Config config) {
