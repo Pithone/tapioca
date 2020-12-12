@@ -10,8 +10,8 @@
 2. Put country code, wireless network SSID and preshared key into `boot/wpa_supplicant.conf`
 3. Copy all the `boot` directory into the raspberry pi boot partition
 4. Power it up and connect to it via ssh
-5. Update it and install git
-    - `sudo touch /var/lib/dpkg/status && sudo apt update && sudo apt upgrade -y && sudo apt install -y git`
+5. Update it and install git and other required packages
+    - `sudo touch /var/lib/dpkg/status && sudo apt update && sudo apt upgrade -y && sudo apt install -y git cmake libssl-dev libcurl4-openssl-dev`
 6. Clone this repo into the raspberry
     - `git clone --recurse-submodules https://github.com/Pithone/tapioca`
 7. Compile tapioca software
